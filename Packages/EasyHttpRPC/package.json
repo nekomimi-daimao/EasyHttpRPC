@@ -1,0 +1,10 @@
+{
+  "name": "daimao.nekomimi.easyhttprpc",
+  "displayName": "EasyHttpRPC",
+  "version": "0.0.1",
+  "description": "simple, http-based RPC for Unity",
+  "license": "MIT",
+  "author": {
+    "name": "ねこみみだいまおう"
+  }
+}
