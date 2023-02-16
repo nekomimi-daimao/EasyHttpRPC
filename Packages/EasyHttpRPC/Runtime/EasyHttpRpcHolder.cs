@@ -27,6 +27,7 @@
 
 using System.Collections.Specialized;
 using System.Text;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -61,6 +62,11 @@ namespace Nekomimi.Daimao
         public static EasyHttpRPC EasyHttpRPC => Instance._easyHttpRPC;
 
         private EasyHttpRPC _easyHttpRPC = null;
+
+        public static UniTask WaitUntilInitialized(CancellationToken token = default)
+        {
+            return UniTask.WaitUntil(() => Instance != null && Instance._easyHttpRPC != null, cancellationToken: token);
+        }
 
         private UniTask<string> Ping(NameValueCollection arg)
         {
