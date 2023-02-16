@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  * 
- * Copyright (c) 2021 NekomimiDaimao
+ * Copyright (c) 2021-2023 NekomimiDaimao
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -65,11 +65,11 @@ namespace Nekomimi.Daimao
         private UniTask<string> Ping(NameValueCollection arg)
         {
             var builder = new StringBuilder();
-            builder.AppendLine(EasyHttpRPC.Address);
             foreach (var s in EasyHttpRPC.Registered)
             {
                 builder.AppendLine(s);
             }
+
             return UniTask.FromResult(builder.ToString());
         }
     }

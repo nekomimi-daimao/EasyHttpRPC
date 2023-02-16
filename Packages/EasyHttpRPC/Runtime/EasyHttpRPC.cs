@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  * 
- * Copyright (c) 2021-2022 NekomimiDaimao
+ * Copyright (c) 2021-2023 NekomimiDaimao
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -44,13 +44,6 @@ namespace Nekomimi.Daimao
         private HttpListener _httpListener;
         public bool IsListening => _httpListener != null && _httpListener.IsListening;
 
-
-        /// <summary>
-        /// base url. if closed, "Closed"
-        /// </summary>
-        public string Address => IsListening ? _address : "Closed";
-
-        private readonly string _address = "Closed";
         private const int PortDefault = 1234;
 
         /// <summary>
@@ -65,8 +58,6 @@ namespace Nekomimi.Daimao
                 return;
             }
 
-            _address = $"http://{IpAddress()}:{port}/";
-
             _httpListener = new HttpListener();
             _httpListener.Prefixes.Add($@"http://+:{port}/");
             _httpListener.Start();
@@ -78,20 +69,6 @@ namespace Nekomimi.Daimao
         {
             _httpListener?.Close();
             _httpListener = null;
-        }
-
-        public static string IpAddress()
-        {
-            try
-            {
-                return Dns.GetHostAddresses(Dns.GetHostName())
-                    .Select(address => address.ToString())
-                    .FirstOrDefault(s => s.StartsWith("192.168")) ?? "localhost";
-            }
-            catch (Exception)
-            {
-                return "localhost";
-            }
         }
 
         private readonly Dictionary<string, Func<NameValueCollection, UniTask<string>>> _functions =
