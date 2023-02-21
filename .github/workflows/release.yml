@@ -15,12 +15,12 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
-      - run: git checkout main
 
       - name: Semantic Release
         id: semantic
         uses: cycjimmy/semantic-release-action@v3
         with:
+          branch: main
           working_directory: ./Packages/EasyHttpRPC
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
