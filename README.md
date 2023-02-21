@@ -34,3 +34,12 @@ EasyHttpRpcHolder.EasyHttpRPC.RegisterRPC(nameof(holder.Ping), holder.Ping);
 ### Use
 
 `192.168.12.34` → http://192.168.12.34:1234
+
+## Defines
+
+`Define Constraints` is as follows.
+
+`UNITY_EDITOR || DEVELOPMENT_BUILD || ALLOW_EHR`
+
+If you want to use it in a release build, define `ALLOW_EHR`.
+
