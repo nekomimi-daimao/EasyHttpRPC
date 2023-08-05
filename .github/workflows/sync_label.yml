@@ -1,0 +1,29 @@
+name: sync_label
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'url'
+        required: true
+        type: string
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+
+      - name: Download
+        run: |
+          echo ${{ inputs.url }} 
+          curl -L ${{ inputs.url }} \
+          -o labels.yml
+          cat labels.yml
+
+      - name: Label Syncer
+        uses: micnncim/action-label-syncer@v1.3.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          manifest: ./labels.yml
+          prune: true
