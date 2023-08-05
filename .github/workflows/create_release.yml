@@ -1,0 +1,73 @@
+name: create release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: main
+
+      - name: Last Release
+        id: last
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          last_tag=`gh release view --json tagName --jq .tagName`
+          echo $last_tag
+          echo "last_tag=$last_tag" >> "$GITHUB_OUTPUT"
+          echo "repo=${GITHUB_REPOSITORY#${GITHUB_REPOSITORY_OWNER}/}" >> $GITHUB_OUTPUT
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - name: Create ReleaseNote
+        id: create
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LAST_TAG: ${{ steps.last.outputs.last_tag }}
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ steps.last.outputs.repo }}
+        run: |
+          next=`deno run --allow-read --allow-write --allow-env --allow-net .github/.deno/create_release.ts`
+          echo $next
+          echo "next=$next" >> "$GITHUB_OUTPUT"
+
+      - name: Commit & Push
+        run: |
+          version=${{ steps.create.outputs.next }}
+          git config user.name "actions-user"
+          git config user.email "action@github.com"
+          git add .
+          git commit -m "Release ${version}"
+          git tag $version
+          git push
+          git push --tags
+
+      - name: Create Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          version=${{ steps.create.outputs.next }}
+          owner=${{ github.repository_owner }}
+          repo=${{ steps.last.outputs.repo }}
+          gh api \
+          --method POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          /repos/${owner}/${repo}/releases \
+          -f tag_name=${version} \
+          -f target_commitish='main' \
+          -F draft=false \
+          -F prerelease=false \
+          -F generate_release_notes=true
