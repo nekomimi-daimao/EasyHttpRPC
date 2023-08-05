@@ -1,0 +1,30 @@
+template: |
+  ## What’s Changed
+
+  $CHANGES
+
+autolabeler:
+  - label: 'added'
+    branch:
+      - '/added\/.+/'
+  - label: 'changed'
+    branch:
+      - '/changed\/.+/'
+  - label: 'deprecated'
+    branch:
+      - '/deprecated\/.+/'
+  - label: 'removed'
+    branch:
+      - '/removed\/.+/'
+  - label: 'fixed'
+    branch:
+      - '/fixed\/.+/'
+  - label: 'security'
+    branch:
+      - '/security\/.+/'
+  - label: 'doc'
+    branch:
+      - '/doc\/.+/'
+  - label: 'other'
+    branch:
+      - '/other\/.+/'
