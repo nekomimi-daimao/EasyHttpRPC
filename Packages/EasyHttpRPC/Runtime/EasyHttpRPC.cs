@@ -197,155 +197,159 @@ namespace Nekomimi.Daimao
     <title>EasyHttpRPC</title>
     <script type=""text/javascript"">
 
-      async function send() {
-        const kv = collect();
-        const url = new URL(window.location.origin);
-        url.pathname = document.getElementById(""path"").value;
-        url.search = new URLSearchParams(kv).toString();
-        let result;
-        try {
-          const request = await fetch(url);
-          result = await request.text();
-        } catch (err) {
-          result = err;
-        }
-        document.getElementById(""result"").value = result;
+        async function send() {
+            const kv = collect();
+            const url = new URL(window.location.origin);
+            url.pathname = document.getElementById(""path"").value;
+            url.search = new URLSearchParams(kv).toString();
+            let result;
+            try {
+                const request = await fetch(url);
+                result = await request.text();
+            } catch (err) {
+                result = err;
+            }
+            document.getElementById(""result"").value = result;
 
-        store();
-        restoreSelect();
-      }
-
-      function add() {
-        const kvArray = document.querySelectorAll("".kv"");
-        const kv = kvArray[kvArray.length - 1];
-        const clone = kv.cloneNode(true);
-        const k = clone.querySelector("".k"");
-        const v = clone.querySelector("".v"");
-        k.value = null;
-        v.value = null;
-        kv.after(clone);
-      }
-
-      function remove() {
-        const kvArray = document.querySelectorAll("".kv"");
-        if (kvArray.length <= 1) {
-          return;
+            store();
+            restoreSelect();
         }
 
-        for (let i = kvArray.length - 1; i >= 0; i--) {
-          const kv = kvArray[i];
-          const k = kv.querySelector("".k"");
-          const v = kv.querySelector("".v"");
-          if (k.value || v.value) {
-            continue;
-          }
-          kv.remove();
-          return;
-        }
-        kvArray[kvArray.length - 1].remove();
-      }
-
-      function collect() {
-        const co = {};
-        const kvArray = document.querySelectorAll("".kv"");
-        for (let i = 0; i < kvArray.length; i++) {
-          const kv = kvArray[i];
-          const k = kv.querySelector("".k"");
-          const v = kv.querySelector("".v"");
-          if (k.value || v.value) {
-            co[k.value] = v.value;
-          }
-        }
-        return co;
-      }
-
-      function clearKeyValue() {
-        const kvArray = document.querySelectorAll("".kv"");
-        for (let i = 0; i < kvArray.length; i++) {
-          const kv = kvArray[i];
-          const k = kv.querySelector("".k"");
-          const v = kv.querySelector("".v"");
-          k.value = null;
-          v.value = null;
-        }
-      }
-
-      // store
-      function store() {
-        const path = document.getElementById(""path"").value;
-        if (!path) {
-          return;
-        }
-        const co = collect();
-        localStorage[path] = JSON.stringify(co);
-      }
-
-      function restore() {
-        const select = document.getElementById(""stored"");
-        const selected = select.options[select.selectedIndex];
-        const path = document.getElementById(""path"");
-        if (!selected.value) {
-          path.value = null;
-          clearKeyValue();
-          return;
-        }
-        const itemJson = localStorage.getItem(selected.value);
-        if (!itemJson) {
-          return;
-        }
-        path.value = selected.value;
-        clearKeyValue();
-        const item = JSON.parse(itemJson);
-        let kvArray = document.querySelectorAll("".kv"");
-        const keys = Object.keys(item);
-        const diff = keys.length - kvArray.length;
-        if (diff > 0) {
-          for (let i = 0; i < diff; i++) {
-            add();
-          }
-          kvArray = document.querySelectorAll("".kv"");
+        function add() {
+            const kvArray = document.querySelectorAll("".kv"");
+            const kv = kvArray[kvArray.length - 1];
+            const clone = kv.cloneNode(true);
+            const k = clone.querySelector("".k"");
+            const v = clone.querySelector("".v"");
+            k.value = null;
+            v.value = null;
+            kv.after(clone);
         }
 
-        for (let i = 0; i < keys.length; i++) {
-          const value = item[keys[i]];
-          const kv = kvArray[i];
-          const k = kv.querySelector("".k"");
-          const v = kv.querySelector("".v"");
-          k.value = keys[i];
-          v.value = value;
-        }
-      }
+        function remove() {
+            const kvArray = document.querySelectorAll("".kv"");
+            if (kvArray.length <= 1) {
+                return;
+            }
 
-      function restoreSelect() {
-        clearSelect();
-        const select = document.getElementById(""stored"");
-        Object.keys(localStorage).forEach((key) => {
-          const option = new Option(key, key);
-          select.add(option);
-        });
-      }
-
-      function clearSelect() {
-        const select = document.getElementById(""stored"");
-        for (let i = select.options.length - 1; i >= 1; i--) {
-          select.options[i].remove();
+            for (let i = kvArray.length - 1; i >= 0; i--) {
+                const kv = kvArray[i];
+                const k = kv.querySelector("".k"");
+                const v = kv.querySelector("".v"");
+                if (k.value || v.value) {
+                    continue;
+                }
+                kv.remove();
+                return;
+            }
+            kvArray[kvArray.length - 1].remove();
         }
-      }
 
-      function clearStored() {
-        const clear = confirm(""clear stored input?"");
-        if (!clear) {
-          return;
+        function collect() {
+            const co = {};
+            const kvArray = document.querySelectorAll("".kv"");
+            for (let i = 0; i < kvArray.length; i++) {
+                const kv = kvArray[i];
+                const k = kv.querySelector("".k"");
+                const v = kv.querySelector("".v"");
+                if (k.value || v.value) {
+                    co[k.value] = v.value;
+                }
+            }
+            return co;
         }
-        localStorage.clear();
-        clearSelect();
-        clearKeyValue();
-        document.getElementById(""path"").value = null;
-      }
+
+        function clearKeyValue() {
+            const kvArray = document.querySelectorAll("".kv"");
+            for (let i = 0; i < kvArray.length; i++) {
+                const kv = kvArray[i];
+                const k = kv.querySelector("".k"");
+                const v = kv.querySelector("".v"");
+                k.value = null;
+                v.value = null;
+            }
+        }
+
+        // store
+        function store() {
+            const path = document.getElementById(""path"").value;
+            if (!path) {
+                return;
+            }
+            const co = collect();
+            localStorage[path] = JSON.stringify(co);
+        }
+
+        function restore() {
+            const select = document.getElementById(""stored"");
+            const selected = select.options[select.selectedIndex];
+            const path = document.getElementById(""path"");
+            if (!selected.value) {
+                path.value = null;
+                clearKeyValue();
+                return;
+            }
+            const itemJson = localStorage.getItem(selected.value);
+            if (!itemJson) {
+                return;
+            }
+            path.value = selected.value;
+            clearKeyValue();
+            const item = JSON.parse(itemJson);
+            let kvArray = document.querySelectorAll("".kv"");
+            const keys = Object.keys(item);
+            const diff = keys.length - kvArray.length;
+            if (diff > 0) {
+                for (let i = 0; i < diff; i++) {
+                    add();
+                }
+                kvArray = document.querySelectorAll("".kv"");
+            }
+
+            for (let i = 0; i < keys.length; i++) {
+                const value = item[keys[i]];
+                const kv = kvArray[i];
+                const k = kv.querySelector("".k"");
+                const v = kv.querySelector("".v"");
+                k.value = keys[i];
+                v.value = value;
+            }
+        }
+
+        function restoreSelect() {
+            clearSelect();
+            const select = document.getElementById(""stored"");
+            Object.keys(localStorage).forEach((key) => {
+                const option = new Option(key, key);
+                select.add(option);
+            });
+        }
+
+        function clearSelect() {
+            const select = document.getElementById(""stored"");
+            for (let i = select.options.length - 1; i >= 1; i--) {
+                select.options[i].remove();
+            }
+        }
+
+        function clearStored() {
+            const clear = confirm(""clear stored input?"");
+            if (!clear) {
+                return;
+            }
+            localStorage.clear();
+            clearSelect();
+            clearKeyValue();
+            document.getElementById(""path"").value = null;
+        }
 
     </script>
 
     <style>
+
+        body {
+            padding: 20px 40px;
+        }
 
         #path {
             margin: 4px auto;
@@ -358,12 +362,16 @@ namespace Nekomimi.Daimao
         }
 
         .action {
-            margin-right: 4px;
+            margin-right: 12px;
         }
 
         .clear {
             margin-left: auto;
             margin-right: 12px;
+        }
+
+        .v {
+            width: 20em;
         }
 
     </style>
@@ -394,8 +402,10 @@ namespace Nekomimi.Daimao
         <button type=""button"" class=""clear"" onclick=clearStored()>Clear</button>
     </div>
     <div class=""kv"">
-        <input type=""text"" class=""k"" placeholder=""key"">
-        <input type=""text"" class=""v"" placeholder=""value"">
+        <label>
+            <input type=""text"" class=""k"" placeholder=""key"">
+            <input type=""text"" class=""v"" placeholder=""value"">
+        </label>
     </div>
 </form>
 
