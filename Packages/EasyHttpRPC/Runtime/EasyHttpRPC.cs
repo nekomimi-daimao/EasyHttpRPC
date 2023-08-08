@@ -228,7 +228,10 @@ namespace Nekomimi.Daimao
 
         function remove() {
             const kvArray = document.querySelectorAll("".kv"");
-            if (kvArray.length <= 1) {
+            if (kvArray.length === 0) {
+                return;
+            } else if (kvArray.length === 1) {
+                clearKeyValue();
                 return;
             }
 
