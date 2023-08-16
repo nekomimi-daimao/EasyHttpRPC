@@ -1,7 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
+using System.Text;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -18,7 +19,7 @@ namespace Nekomimi.Daimao
             AndroidFilesDir,
         }
 
-        private static readonly Dictionary<PathType, string> Path = new Dictionary<PathType, string>()
+        private static readonly Dictionary<PathType, string> PathTable = new Dictionary<PathType, string>()
         {
             { PathType.Persistent, "persistent" },
             { PathType.Tmp, "tmp" },
@@ -27,7 +28,7 @@ namespace Nekomimi.Daimao
 
         private readonly Dictionary<PathType, string> _pathCache = new Dictionary<PathType, string>();
 
-        private async UniTask CachePath()
+        public async UniTask CachePath()
         {
             await UniTask.SwitchToMainThread();
 
@@ -51,8 +52,10 @@ namespace Nekomimi.Daimao
 #endif
         }
 
-        public async UniTask ServeFile(HttpListenerResponse response, FileInfo fileInfo)
+        private static async UniTask ServeFile(HttpListenerResponse response, string file)
         {
+            var fileInfo = new FileInfo(file);
+
             if (!fileInfo.Exists)
             {
                 response.StatusCode = (int)HttpStatusCode.NotFound;
@@ -61,17 +64,78 @@ namespace Nekomimi.Daimao
 
             using (var fileStream = fileInfo.OpenRead())
             {
-                response.StatusCode = (int)HttpStatusCode.OK;
                 await fileStream.CopyToAsync(response.OutputStream);
                 fileStream.Close();
             }
+
+            response.StatusCode = (int)HttpStatusCode.OK;
         }
 
-        private DirectoryInfo GetDir(PathType pathType, string path)
+        private async UniTask ParseDir(HttpListenerResponse response, string dir)
         {
-            var dir = System.IO.Path.Combine(_pathCache[pathType], path);
-            var info = new DirectoryInfo(dir);
-            return info;
+            var directoryInfo = new DirectoryInfo(dir);
+
+            if (!directoryInfo.Exists)
+            {
+                response.StatusCode = (int)HttpStatusCode.NotFound;
+                return;
+            }
+
+            var builderDir = new StringBuilder();
+            foreach (var dirInfo in directoryInfo.EnumerateDirectories())
+            {
+                builderDir.AppendLine("<a href=`./_REPLACE_`>_REPLACE_</a>".Replace("_REPLACE_", dirInfo.Name));
+            }
+
+            var builderFile = new StringBuilder();
+            foreach (var fileInfo in directoryInfo.EnumerateFiles())
+            {
+                builderFile.AppendLine("<a href=`./_REPLACE_`>_REPLACE_</a>".Replace("_REPLACE_", fileInfo.Name));
+            }
+
+            using (var streamWriter = new StreamWriter(response.OutputStream))
+            {
+                // TODO replaced html
+                // await streamWriter.WriteAsync(message);
+            }
+
+            response.StatusCode = (int)HttpStatusCode.OK;
+        }
+
+        public async UniTask Parse(HttpListenerRequest request, HttpListenerResponse response)
+        {
+            // 1234:filer/persistent/a.txt
+            // 1234:filer/persistent/dir/dir2/b.txt
+            var param = request.Url.Segments.SkipWhile(s => !s.StartsWith(RequestPath)).Skip(1).ToArray();
+            var pair = PathTable.FirstOrDefault(pair => string.Equals(pair.Value, param[0]));
+
+            if (string.IsNullOrEmpty(pair.Value))
+            {
+                // TODO return top
+                return;
+            }
+
+            if (!_pathCache.TryGetValue(pair.Key, out var pathType))
+            {
+                // TODO error response
+                return;
+            }
+
+            param[0] = pathType;
+            var combined = Path.Combine(param);
+
+            if (File.Exists(combined))
+            {
+                await ServeFile(response, combined);
+            }
+            else if (Directory.Exists(combined))
+            {
+                await ParseDir(response, combined);
+            }
+            else
+            {
+                // TODO error no such file
+            }
         }
     }
 }
