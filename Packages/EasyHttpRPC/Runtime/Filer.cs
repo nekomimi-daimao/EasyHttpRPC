@@ -173,8 +173,12 @@ namespace Nekomimi.Daimao
     <meta charset='UTF-8'>
     <title>EasyHttpRPC/Filer</title>
     <script type='text/javascript'>
-        function pathType() {
+        function pathChanged() {
             const select = document.getElementById('pathType');
+            if (!select.value || select.value.length === 0) {
+                return;
+            }
+            window.location.href = `/filer/${select.value}`;
         }
     </script>
     <style>
@@ -190,8 +194,9 @@ namespace Nekomimi.Daimao
 </b>
 <form>
     <label>path :
-        <select id='pathType' onchange='pathType()'>
-            <option selected value='persistent'>persistent</option>
+        <select id='pathType' onchange='pathChanged()'>
+            <option selected value=''>none</option>
+            <option value='persistent'>persistent</option>
             <option value='tmp'>tmp</option>
             <option value='getfilesdir'>getfilesdir</option>
         </select>
