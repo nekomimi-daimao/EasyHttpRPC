@@ -141,7 +141,7 @@ namespace Nekomimi.Daimao
                         response.ContentType = "text/html;";
                         message = Html;
                     }
-                    else if (string.Equals(method, Filer.RequestPath))
+                    else if (method.StartsWith($"{Filer.RequestPath}/"))
                     {
                         await filer.Serve(request, response);
                         continue;

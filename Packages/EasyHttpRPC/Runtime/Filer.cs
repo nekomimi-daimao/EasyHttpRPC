@@ -116,11 +116,17 @@ namespace Nekomimi.Daimao
         public async UniTask Serve(HttpListenerRequest request, HttpListenerResponse response)
         {
             var param = request.Url.Segments.SkipWhile(s => !s.StartsWith(RequestPath)).Skip(1).ToArray();
-            var pair = PathTable.FirstOrDefault(pair => string.Equals(pair.Value, param[0]));
+            if (!param.Any())
+            {
+                await ServeMessage(response, null);
+                return;
+            }
 
+            var pair = PathTable.FirstOrDefault(pair => string.Equals(pair.Value, param[0]));
+            // FirstOrDefault, default
             if (string.IsNullOrEmpty(pair.Value))
             {
-                await ServeMessage(response, request.RawUrl);
+                await ServeMessage(response, string.Join(string.Empty, param));
                 return;
             }
 
