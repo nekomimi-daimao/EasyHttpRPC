@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-    <meta charset="UTF-8">
-    <title>EasyHttpRPC</title>
-    <script type="text/javascript">
+    <meta charset='UTF-8'>
+    <title>EasyHttpRPC/Filer</title>
+    <script type='text/javascript'>
+        function pathType() {
+            const select = document.getElementById('pathType');
+        }
     </script>
     <style>
         body {
@@ -12,8 +15,22 @@
     </style>
 </head>
 <body>
-<h1>Filer</h1>
+<h1>EasyHttpRPC/Filer</h1>
+<b>
+    <!--REPLACE_MESSAGE-->
+</b>
+<form>
+    <label>path :
+        <select id='pathType' onchange='pathType()'>
+            <option selected value='persistent'>persistent</option>
+            <option value='tmp'>tmp</option>
+            <option value='getfilesdir'>getfilesdir</option>
+        </select>
+    </label>
+</form>
+<hr>
 <!--REPLACE_DIR-->
+<hr>
 <!--REPLACE_FILE-->
 </body>
 </html>        
