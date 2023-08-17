@@ -71,14 +71,14 @@ namespace Nekomimi.Daimao
             response.StatusCode = (int)HttpStatusCode.OK;
         }
 
-        private async UniTask ParseDir(HttpListenerResponse response, string dir)
+        private static UniTask ServeDir(HttpListenerResponse response, string dir)
         {
             var directoryInfo = new DirectoryInfo(dir);
 
             if (!directoryInfo.Exists)
             {
                 response.StatusCode = (int)HttpStatusCode.NotFound;
-                return;
+                return UniTask.CompletedTask;
             }
 
             var builderDir = new StringBuilder();
@@ -93,31 +93,40 @@ namespace Nekomimi.Daimao
                 builderFile.AppendLine("<a href=`./_REPLACE_`>_REPLACE_</a>".Replace("_REPLACE_", fileInfo.Name));
             }
 
+            return ServeHtml(response,
+                GenerateHtml(directoryInfo.FullName, builderDir.ToString(), builderFile.ToString()));
+        }
+
+        private static UniTask ServeMessage(HttpListenerResponse response, string message)
+        {
+            return ServeHtml(response, GenerateHtml(message, null, null));
+        }
+
+        private static async UniTask ServeHtml(HttpListenerResponse response, string html)
+        {
             using (var streamWriter = new StreamWriter(response.OutputStream))
             {
-                // TODO replaced html
-                // await streamWriter.WriteAsync(message);
+                await streamWriter.WriteAsync(html);
             }
 
+            response.ContentType = "text/html;";
             response.StatusCode = (int)HttpStatusCode.OK;
         }
 
-        public async UniTask Parse(HttpListenerRequest request, HttpListenerResponse response)
+        public async UniTask Serve(HttpListenerRequest request, HttpListenerResponse response)
         {
-            // 1234:filer/persistent/a.txt
-            // 1234:filer/persistent/dir/dir2/b.txt
             var param = request.Url.Segments.SkipWhile(s => !s.StartsWith(RequestPath)).Skip(1).ToArray();
             var pair = PathTable.FirstOrDefault(pair => string.Equals(pair.Value, param[0]));
 
             if (string.IsNullOrEmpty(pair.Value))
             {
-                // TODO return top
+                await ServeMessage(response, request.RawUrl);
                 return;
             }
 
             if (!_pathCache.TryGetValue(pair.Key, out var pathType))
             {
-                // TODO error response
+                await ServeMessage(response, "invalid pathType");
                 return;
             }
 
@@ -130,12 +139,65 @@ namespace Nekomimi.Daimao
             }
             else if (Directory.Exists(combined))
             {
-                await ParseDir(response, combined);
+                await ServeDir(response, combined);
             }
             else
             {
-                // TODO error no such file
+                await ServeMessage(response, "no such path");
             }
         }
+
+        private const string ReplaceMessage = "<!--REPLACE_MESSAGE-->";
+        private const string ReplaceDir = "<!--REPLACE_DIR-->";
+        private const string ReplaceFile = "<!--REPLACE_FILE-->";
+
+        private static string GenerateHtml(string message, string dir, string file)
+        {
+            return Html
+                .Replace(ReplaceMessage, message)
+                .Replace(ReplaceDir, dir)
+                .Replace(ReplaceFile, file);
+        }
+
+        private const string Html = @"
+
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>EasyHttpRPC/Filer</title>
+    <script type='text/javascript'>
+        function pathType() {
+            const select = document.getElementById('pathType');
+        }
+    </script>
+    <style>
+        body {
+            padding: 20px 40px;
+        }
+    </style>
+</head>
+<body>
+<h1>EasyHttpRPC/Filer</h1>
+<b>
+    <!--REPLACE_MESSAGE-->
+</b>
+<form>
+    <label>path :
+        <select id='pathType' onchange='pathType()'>
+            <option selected value='persistent'>persistent</option>
+            <option value='tmp'>tmp</option>
+            <option value='getfilesdir'>getfilesdir</option>
+        </select>
+    </label>
+</form>
+<hr>
+<!--REPLACE_DIR-->
+<hr>
+<!--REPLACE_FILE-->
+</body>
+</html>
+
+";
     }
 }
