@@ -185,6 +185,11 @@ namespace Nekomimi.Daimao
             window.location.pathname = `/filer/${select.value}`;
         }
 
+        function back() {
+            const current = window.location.pathname;
+            window.location.pathname = current.substring(0, current.lastIndexOf('/') + 1);
+        }
+
         function onLinkDir(e) {
             const name = e.target.textContent;
             window.location.pathname += `/${encodeURIComponent(name)}`;
@@ -217,6 +222,8 @@ namespace Nekomimi.Daimao
 <b>
     <!--REPLACE_MESSAGE-->
 </b>
+<br>
+<a href='javascript:void(0);' onclick=back()> ← back </a>
 <form>
     <label>path :
         <select id='pathType' onchange='pathChanged()'>
