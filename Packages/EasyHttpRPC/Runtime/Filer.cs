@@ -126,7 +126,8 @@ namespace Nekomimi.Daimao
                 return;
             }
 
-            var pair = PathTable.FirstOrDefault(pair => string.Equals(pair.Value, param[0]));
+            var pair = PathTable.FirstOrDefault(pair =>
+                string.Equals(pair.Value, param[0].Replace("/", string.Empty)));
             // FirstOrDefault, default
             if (string.IsNullOrEmpty(pair.Value))
             {
