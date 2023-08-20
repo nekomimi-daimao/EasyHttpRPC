@@ -62,13 +62,12 @@ namespace Nekomimi.Daimao
                 return;
             }
 
+            response.StatusCode = (int)HttpStatusCode.OK;
             using (var fileStream = fileInfo.OpenRead())
             {
                 await fileStream.CopyToAsync(response.OutputStream);
                 fileStream.Close();
             }
-
-            response.StatusCode = (int)HttpStatusCode.OK;
         }
 
         private static UniTask ServeDir(HttpListenerResponse response, string dir)
