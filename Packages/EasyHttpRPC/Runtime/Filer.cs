@@ -192,7 +192,17 @@ namespace Nekomimi.Daimao
 
         function onLinkFile(e) {
             const name = e.target.textContent;
-            // TODO download file
+            const url = new URL(window.location.href);
+            for (let key of url.searchParams.keys()) {
+                url.searchParams.delete(key);
+            }
+            url.href += `/${encodeURIComponent(name)}`;
+            const a = document.createElement('a');
+            document.body.appendChild(a);
+            a.download = name;
+            a.href = url.href;
+            a.click();
+            a.remove();
         }
 
     </script>
