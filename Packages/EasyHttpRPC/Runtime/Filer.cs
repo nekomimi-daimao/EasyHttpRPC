@@ -84,13 +84,17 @@ namespace Nekomimi.Daimao
             var builderDir = new StringBuilder();
             foreach (var dirInfo in directoryInfo.EnumerateDirectories())
             {
-                builderDir.AppendLine("<a href=`./_REPLACE_`>_REPLACE_</a>".Replace("_REPLACE_", dirInfo.Name));
+                builderDir.AppendLine(
+                    "<a href='javascript:void(0);' onclick=onLinkDir(arguments[0])>_REPLACE_</a>"
+                        .Replace("_REPLACE_", dirInfo.Name));
             }
 
             var builderFile = new StringBuilder();
             foreach (var fileInfo in directoryInfo.EnumerateFiles())
             {
-                builderFile.AppendLine("<a href=`./_REPLACE_`>_REPLACE_</a>".Replace("_REPLACE_", fileInfo.Name));
+                builderFile.AppendLine(
+                    "<a href='javascript:void(0);' onclick=onLinkFile(arguments[0])>_REPLACE_</a>"
+                        .Replace("_REPLACE_", fileInfo.Name));
             }
 
             return ServeHtml(response,
@@ -178,8 +182,19 @@ namespace Nekomimi.Daimao
             if (!select.value || select.value.length === 0) {
                 return;
             }
-            window.location.href = `/filer/${select.value}`;
+            window.location.pathname = `/filer/${select.value}`;
         }
+
+        function onLinkDir(e) {
+            const name = e.target.textContent;
+            window.location.pathname += `/${encodeURIComponent(name)}`;
+        }
+
+        function onLinkFile(e) {
+            const name = e.target.textContent;
+            // TODO download file
+        }
+
     </script>
     <style>
         body {

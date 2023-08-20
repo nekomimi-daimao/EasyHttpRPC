@@ -9,8 +9,19 @@
             if (!select.value || select.value.length === 0) {
                 return;
             }
-            window.location.href = `/filer/${select.value}`;
+            window.location.pathname = `/filer/${select.value}`;
         }
+
+        function onLinkDir(e) {
+            const name = e.target.textContent;
+            window.location.pathname += `/${encodeURIComponent(name)}`;
+        }
+
+        function onLinkFile(e) {
+            const name = e.target.textContent;
+            // TODO download file
+        }
+
     </script>
     <style>
         body {
