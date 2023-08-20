@@ -84,7 +84,7 @@ namespace Nekomimi.Daimao
             foreach (var dirInfo in directoryInfo.EnumerateDirectories())
             {
                 builderDir.AppendLine(
-                    "<a href='javascript:void(0);' onclick=onLinkDir(arguments[0])>_REPLACE_</a>"
+                    "<li><a href='javascript:void(0);' onclick=onLinkDir(arguments[0])>_REPLACE_</a></li>"
                         .Replace("_REPLACE_", dirInfo.Name));
             }
 
@@ -92,7 +92,7 @@ namespace Nekomimi.Daimao
             foreach (var fileInfo in directoryInfo.EnumerateFiles())
             {
                 builderFile.AppendLine(
-                    "<a href='javascript:void(0);' onclick=onLinkFile(arguments[0])>_REPLACE_</a>"
+                    "<li><a href='javascript:void(0);' onclick=onLinkFile(arguments[0])>_REPLACE_</a></li>"
                         .Replace("_REPLACE_", fileInfo.Name));
             }
 
@@ -228,11 +228,16 @@ namespace Nekomimi.Daimao
     </label>
 </form>
 <hr>
-<!--REPLACE_DIR-->
+<ul>
+    <!--REPLACE_DIR-->
+</ul>
 <hr>
-<!--REPLACE_FILE-->
+<ul>
+    <!--REPLACE_FILE-->
+</ul>
 </body>
 </html>
+
 
 ";
     }
