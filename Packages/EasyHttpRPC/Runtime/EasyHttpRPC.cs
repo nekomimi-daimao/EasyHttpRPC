@@ -197,17 +197,18 @@ namespace Nekomimi.Daimao
         }
 
         private const string Html = @"
+
 <!DOCTYPE html>
-<html lang=""en"">
+<html lang='en'>
 <head>
-    <meta charset=""UTF-8"">
+    <meta charset='UTF-8'>
     <title>EasyHttpRPC</title>
-    <script type=""text/javascript"">
+    <script type='text/javascript'>
 
         async function send() {
             const kv = collect();
             const url = new URL(window.location.origin);
-            url.pathname = document.getElementById(""path"").value;
+            url.pathname = document.getElementById('path').value;
             url.search = new URLSearchParams(kv).toString();
             let result;
             try {
@@ -216,25 +217,25 @@ namespace Nekomimi.Daimao
             } catch (err) {
                 result = err;
             }
-            document.getElementById(""result"").value = result;
+            document.getElementById('result').value = result;
 
             store();
             restoreSelect();
         }
 
         function add() {
-            const kvArray = document.querySelectorAll("".kv"");
+            const kvArray = document.querySelectorAll('.kv');
             const kv = kvArray[kvArray.length - 1];
             const clone = kv.cloneNode(true);
-            const k = clone.querySelector("".k"");
-            const v = clone.querySelector("".v"");
+            const k = clone.querySelector('.k');
+            const v = clone.querySelector('.v');
             k.value = null;
             v.value = null;
             kv.after(clone);
         }
 
         function remove() {
-            const kvArray = document.querySelectorAll("".kv"");
+            const kvArray = document.querySelectorAll('.kv');
             if (kvArray.length === 0) {
                 return;
             } else if (kvArray.length === 1) {
@@ -244,8 +245,8 @@ namespace Nekomimi.Daimao
 
             for (let i = kvArray.length - 1; i >= 0; i--) {
                 const kv = kvArray[i];
-                const k = kv.querySelector("".k"");
-                const v = kv.querySelector("".v"");
+                const k = kv.querySelector('.k');
+                const v = kv.querySelector('.v');
                 if (k.value || v.value) {
                     continue;
                 }
@@ -257,11 +258,11 @@ namespace Nekomimi.Daimao
 
         function collect() {
             const co = {};
-            const kvArray = document.querySelectorAll("".kv"");
+            const kvArray = document.querySelectorAll('.kv');
             for (let i = 0; i < kvArray.length; i++) {
                 const kv = kvArray[i];
-                const k = kv.querySelector("".k"");
-                const v = kv.querySelector("".v"");
+                const k = kv.querySelector('.k');
+                const v = kv.querySelector('.v');
                 if (k.value || v.value) {
                     co[k.value] = v.value;
                 }
@@ -270,11 +271,11 @@ namespace Nekomimi.Daimao
         }
 
         function clearKeyValue() {
-            const kvArray = document.querySelectorAll("".kv"");
+            const kvArray = document.querySelectorAll('.kv');
             for (let i = 0; i < kvArray.length; i++) {
                 const kv = kvArray[i];
-                const k = kv.querySelector("".k"");
-                const v = kv.querySelector("".v"");
+                const k = kv.querySelector('.k');
+                const v = kv.querySelector('.v');
                 k.value = null;
                 v.value = null;
             }
@@ -282,7 +283,7 @@ namespace Nekomimi.Daimao
 
         // store
         function store() {
-            const path = document.getElementById(""path"").value;
+            const path = document.getElementById('path').value;
             if (!path) {
                 return;
             }
@@ -291,9 +292,9 @@ namespace Nekomimi.Daimao
         }
 
         function restore() {
-            const select = document.getElementById(""stored"");
+            const select = document.getElementById('stored');
             const selected = select.options[select.selectedIndex];
-            const path = document.getElementById(""path"");
+            const path = document.getElementById('path');
             if (!selected.value) {
                 path.value = null;
                 clearKeyValue();
@@ -306,21 +307,21 @@ namespace Nekomimi.Daimao
             path.value = selected.value;
             clearKeyValue();
             const item = JSON.parse(itemJson);
-            let kvArray = document.querySelectorAll("".kv"");
+            let kvArray = document.querySelectorAll('.kv');
             const keys = Object.keys(item);
             const diff = keys.length - kvArray.length;
             if (diff > 0) {
                 for (let i = 0; i < diff; i++) {
                     add();
                 }
-                kvArray = document.querySelectorAll("".kv"");
+                kvArray = document.querySelectorAll('.kv');
             }
 
             for (let i = 0; i < keys.length; i++) {
                 const value = item[keys[i]];
                 const kv = kvArray[i];
-                const k = kv.querySelector("".k"");
-                const v = kv.querySelector("".v"");
+                const k = kv.querySelector('.k');
+                const v = kv.querySelector('.v');
                 k.value = keys[i];
                 v.value = value;
             }
@@ -328,7 +329,7 @@ namespace Nekomimi.Daimao
 
         function restoreSelect() {
             clearSelect();
-            const select = document.getElementById(""stored"");
+            const select = document.getElementById('stored');
             Object.keys(localStorage).forEach((key) => {
                 const option = new Option(key, key);
                 select.add(option);
@@ -336,21 +337,21 @@ namespace Nekomimi.Daimao
         }
 
         function clearSelect() {
-            const select = document.getElementById(""stored"");
+            const select = document.getElementById('stored');
             for (let i = select.options.length - 1; i >= 1; i--) {
                 select.options[i].remove();
             }
         }
 
         function clearStored() {
-            const clear = confirm(""clear stored input?"");
+            const clear = confirm('clear stored input?');
             if (!clear) {
                 return;
             }
             localStorage.clear();
             clearSelect();
             clearKeyValue();
-            document.getElementById(""path"").value = null;
+            document.getElementById('path').value = null;
         }
 
     </script>
@@ -384,43 +385,55 @@ namespace Nekomimi.Daimao
             width: 20em;
         }
 
+        .icon a {
+            font-size: 1.4em;
+            margin-right: 1em;
+        }
+
     </style>
 
 </head>
-<body onload=""restoreSelect()"">
+<body onload='restoreSelect()'>
+
+<span class='icon'>
+<a href='/'>🏡</a>
+<a href='/filer/'>📁</a>
+</span>
+
 <h1>EasyHttpRPC</h1>
 
 <form>
     <label>result<br>
-        <textarea id=""result"" rows=""6"" cols=""60""> </textarea>
+        <textarea id='result' rows='6' cols='60'> </textarea>
     </label>
     <br>
     <label>restore :
-        <select id=""stored"" onchange=""restore()"">
-            <option selected value="""">new</option>
+        <select id='stored' onchange='restore()'>
+            <option selected value=''>new</option>
         </select>
     </label>
     <br>
     <label>pass :
-        <input type=""text"" id=""path"">
+        <input type='text' id='path'>
     </label>
     <br>
-    <div class=""action_container"">
-        <button type=""button"" class=""action"" onclick=send()>Send</button>
-        <button type=""button"" class=""action"" onclick=add()>Add</button>
-        <button type=""button"" class=""action"" onclick=remove()>Remove</button>
-        <button type=""button"" class=""clear"" onclick=clearStored()>Clear</button>
+    <div class='action_container'>
+        <button type='button' class='action' onclick=send()>Send</button>
+        <button type='button' class='action' onclick=add()>Add</button>
+        <button type='button' class='action' onclick=remove()>Remove</button>
+        <button type='button' class='clear' onclick=clearStored()>Clear</button>
     </div>
-    <div class=""kv"">
+    <div class='kv'>
         <label>
-            <input type=""text"" class=""k"" placeholder=""key"">
-            <input type=""text"" class=""v"" placeholder=""value"">
+            <input type='text' class='k' placeholder='key'>
+            <input type='text' class='v' placeholder='value'>
         </label>
     </div>
 </form>
 
 </body>
 </html>
+
 ";
     }
 }

@@ -185,7 +185,7 @@ namespace Nekomimi.Daimao
             window.location.pathname = `/filer/${select.value}`;
         }
 
-        function back() {
+        function parent() {
             const current = window.location.pathname;
             window.location.pathname = current.substring(0, current.lastIndexOf('/') + 1);
         }
@@ -215,15 +215,20 @@ namespace Nekomimi.Daimao
         body {
             padding: 20px 40px;
         }
+
+        .icon a {
+            font-size: 1.4em;
+            margin-right: 1em;
+        }
+
     </style>
 </head>
 <body>
+<span class='icon'>
+<a href='/'>🏡</a>
+<a href='/filer/'>📁</a>
+</span>
 <h1>EasyHttpRPC/Filer</h1>
-<b>
-    <!--REPLACE_MESSAGE-->
-</b>
-<br>
-<a href='javascript:void(0);' onclick=back()> ← back </a>
 <form>
     <label>path :
         <select id='pathType' onchange='pathChanged()'>
@@ -234,6 +239,11 @@ namespace Nekomimi.Daimao
         </select>
     </label>
 </form>
+<b>
+    <!--REPLACE_MESSAGE-->
+</b>
+<br>
+<a href='javascript:void(0);' onclick=parent()> ← parent </a>
 <hr>
 <ul>
     <!--REPLACE_DIR-->
@@ -244,7 +254,6 @@ namespace Nekomimi.Daimao
 </ul>
 </body>
 </html>
-
 
 ";
     }
