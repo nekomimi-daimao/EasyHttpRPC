@@ -95,4 +95,9 @@ while (true) {
 
 Deno.writeTextFileSync("CHANGELOG.md", currentReleases.join("\n"));
 
+const packageJsonRaw = await Deno.readTextFile("./Packages/EasyHttpRPC/package.json");
+const packageJson = JSON.parse(packageJsonRaw);
+packageJson.version = next;
+await Deno.writeTextFile("./Packages/EasyHttpRPC/package.json", JSON.stringify(packageJson, null, 2) + "\n");
+
 console.log(`v${next}`);
