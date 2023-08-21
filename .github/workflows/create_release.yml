@@ -43,6 +43,10 @@ jobs:
           echo $next
           echo "next=$next" >> "$GITHUB_OUTPUT"
 
+      - name: Copy ReleaseNote
+        run: |
+          cp CHANGELOG.md Packages/EasyHttpRPC/CHANGELOG.md -f
+
       - name: Commit & Push
         run: |
           version=${{ steps.create.outputs.next }}
