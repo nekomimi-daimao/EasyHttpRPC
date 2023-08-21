@@ -1,5 +1,14 @@
-## v1.2.0
+## v1.2.1
 
+
+## What's Changed
+### Fixed
+* CHANGELOG.mdがコピーされていなかったので上書きする by @nekomimi-daimao in https://github.com/nekomimi-daimao/EasyHttpRPC/pull/13
+
+
+**Full Changelog**: https://github.com/nekomimi-daimao/EasyHttpRPC/compare/v1.2.0...v1.2.1
+## v1.2.0
+<!-- Release notes generated using configuration in .github/release.yml at v1.2.0 -->
 
 ## What's Changed
 ### Changed
