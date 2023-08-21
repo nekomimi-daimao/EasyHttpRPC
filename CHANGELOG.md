@@ -1,5 +1,18 @@
-## v1.1.0
+## v1.2.0
 
+
+## What's Changed
+### Changed
+* ディレクトリとファイルをそれぞれリストで表示する by @nekomimi-daimao in https://github.com/nekomimi-daimao/EasyHttpRPC/pull/10
+* 親階層に戻るリンクを追加 by @nekomimi-daimao in https://github.com/nekomimi-daimao/EasyHttpRPC/pull/11
+* Changed/open filer by @nekomimi-daimao in https://github.com/nekomimi-daimao/EasyHttpRPC/pull/12
+### Fixed
+* Fixed/update releases by @nekomimi-daimao in https://github.com/nekomimi-daimao/EasyHttpRPC/pull/9
+
+
+**Full Changelog**: https://github.com/nekomimi-daimao/EasyHttpRPC/compare/v1.1.0...v1.2.0
+## v1.1.0
+<!-- Release notes generated using configuration in .github/release.yml at v1.1.0 -->
 
 ## What's Changed
 ### Added
