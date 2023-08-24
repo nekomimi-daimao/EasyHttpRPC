@@ -176,6 +176,8 @@ namespace Nekomimi.Daimao
 <head>
     <meta charset='UTF-8'>
     <title>EasyHttpRPC/Filer</title>
+    <link rel='icon'
+          href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdjYGBg+A8AAQQBAHAgZQsAAAAASUVORK5CYII='>
     <script type='text/javascript'>
         function pathChanged() {
             const select = document.getElementById('pathType');
