@@ -192,7 +192,12 @@ namespace Nekomimi.Daimao
 
         function onLinkDir(e) {
             const name = e.target.textContent;
-            window.location.pathname += `/${encodeURIComponent(name)}`;
+            let addPath = encodeURIComponent(name);
+            const current = window.location.pathname;
+            if (!current.endsWith('/')) {
+                addPath = '/' + addPath;
+            }
+            window.location.pathname += addPath;
         }
 
         function onLinkFile(e) {
