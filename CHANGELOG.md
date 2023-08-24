@@ -1,5 +1,15 @@
-## v1.2.1
+## v1.2.2
 
+
+## What's Changed
+### Fixed
+* 親階層に戻る際に/が二重について移動不能になる by @nekomimi-daimao in https://github.com/nekomimi-daimao/EasyHttpRPC/pull/15
+* 埋め込みのfaviconを返してエラーメッセージを抑制 by @nekomimi-daimao in https://github.com/nekomimi-daimao/EasyHttpRPC/pull/14
+
+
+**Full Changelog**: https://github.com/nekomimi-daimao/EasyHttpRPC/compare/v1.2.1...v1.2.2
+## v1.2.1
+<!-- Release notes generated using configuration in .github/release.yml at v1.2.1 -->
 
 ## What's Changed
 ### Fixed
