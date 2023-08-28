@@ -43,8 +43,11 @@ jobs:
           echo $next
           echo "next=$next" >> "$GITHUB_OUTPUT"
 
-      - name: Copy ReleaseNote
-        run: cp -f CHANGELOG.md Packages/EasyHttpRPC/CHANGELOG.md
+      - name: Copy Docs
+        run: |
+          cp -f CHANGELOG.md Packages/EasyHttpRPC/CHANGELOG.md
+          cp -f README.md Packages/EasyHttpRPC/README.md
+          cp -f LICENSE Packages/EasyHttpRPC/LICENSE
 
       - name: Commit & Push
         run: |
