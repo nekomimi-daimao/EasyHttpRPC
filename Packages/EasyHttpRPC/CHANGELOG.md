@@ -1,5 +1,14 @@
-## v1.2.2
+## v1.2.3
 
+
+## What's Changed
+### Fixed
+* Androidでのコンパイルエラーを解消 by @nekomimi-daimao in https://github.com/nekomimi-daimao/EasyHttpRPC/pull/16
+
+
+**Full Changelog**: https://github.com/nekomimi-daimao/EasyHttpRPC/compare/v1.2.2...v1.2.3
+## v1.2.2
+<!-- Release notes generated using configuration in .github/release.yml at v1.2.2 -->
 
 ## What's Changed
 ### Fixed
