@@ -45,7 +45,7 @@ namespace Nekomimi.Daimao
                     _pathCache[PathType.AndroidFilesDir] = getFilesDir.Call<string>("getCanonicalPath");
                 }
             }
-            catch (Exception e)
+            catch (System.Exception e)
             {
                 Debug.LogException(e);
             }
