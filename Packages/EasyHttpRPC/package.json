@@ -1,7 +1,7 @@
 {
   "name": "daimao.nekomimi.easyhttprpc",
   "displayName": "EasyHttpRPC",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "simple, http-based RPC for Unity",
   "license": "MIT",
   "author": {
