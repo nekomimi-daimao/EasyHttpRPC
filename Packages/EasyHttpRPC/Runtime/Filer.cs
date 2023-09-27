@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -141,7 +142,7 @@ namespace Nekomimi.Daimao
             }
 
             param[0] = pathType;
-            var combined = Path.Combine(param);
+            var combined = Uri.UnescapeDataString(Path.Combine(param));
 
             if (File.Exists(combined))
             {
