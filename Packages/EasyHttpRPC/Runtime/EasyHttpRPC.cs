@@ -109,8 +109,7 @@ namespace Nekomimi.Daimao
         {
             token.Register(() => { listener?.Close(); });
 
-            var filer = new Filer();
-            await filer.CachePath();
+            Filer filer = null;
 
             await UniTask.SwitchToThreadPool();
 
@@ -143,6 +142,12 @@ namespace Nekomimi.Daimao
                     }
                     else if (method.StartsWith($"{Filer.RequestPath}/"))
                     {
+                        if (filer == null)
+                        {
+                            filer = new Filer();
+                            await filer.CachePath();
+                        }
+
                         await filer.Serve(request, response);
                         continue;
                     }
