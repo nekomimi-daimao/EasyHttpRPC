@@ -24,7 +24,7 @@ namespace Nekomimi.Daimao
         {
             { PathType.Persistent, "persistent" },
             { PathType.Tmp, "tmp" },
-            { PathType.AndroidFilesDir, "filesdir" },
+            { PathType.AndroidFilesDir, "getfilesdir" },
         };
 
         private readonly Dictionary<PathType, string> _pathCache = new Dictionary<PathType, string>();
