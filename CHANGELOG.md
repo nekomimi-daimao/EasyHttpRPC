@@ -1,5 +1,16 @@
-## v1.2.4
+## v1.2.5
 
+
+## What's Changed
+### Fixed
+* Fixed/android path by @nekomimi-daimao in https://github.com/nekomimi-daimao/EasyHttpRPC/pull/19
+### Doc
+* Doc/readme filer by @nekomimi-daimao in https://github.com/nekomimi-daimao/EasyHttpRPC/pull/18
+
+
+**Full Changelog**: https://github.com/nekomimi-daimao/EasyHttpRPC/compare/v1.2.4...v1.2.5
+## v1.2.4
+<!-- Release notes generated using configuration in .github/release.yml at v1.2.4 -->
 
 ## What's Changed
 ### Fixed
